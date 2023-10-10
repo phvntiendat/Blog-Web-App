@@ -1,0 +1,131 @@
+Blog App 
+    Client : Vuejs3 
+    API    : Django==4.0.4
+    DB     : SQLite3 
+
+    + users 
+        + id 
+        + username 
+        + email 
+        + password 
+        + fullname 
+        + gender 
+        + date_of_birth 
+    
+    + avatars 
+        + id 
+        + id_user
+        + path 
+
+    + articles
+        + id 
+        + id_user 
+        + title 
+        + content 
+        + created_at 
+        + updated-at
+
+    + cover_images 
+        + id 
+        + id_article
+        + path
+
+    + comments 
+        + id 
+        + id_user
+        + id_article 
+        + content 
+        + created_at 
+        + updated_at 
+
+Relationship
+    users 1-1 avatars
+    users 1-n articles
+    users 1-n comments
+
+    articles 1-1 cover_images
+    articles 1-n comments
+
+===========================================================
+
+Công cụ test API : 
+    + Post man 
+Công cụ quản lý DB SQLite3
+    + SQLite Studio 
+
+Authentication
+    + Role => user 
+
+    + Login 
+        + username or email 
+        + pw 
+            => jwt => token 
+    + Register 
+        + username 
+        + email (duy nhất)
+        + password 
+        + fullname 
+        + gender 
+        + date_of_birth 
+
+CRUD 
+    + users 
+        + Update infor 
+        + Change password 
+        + Forgot password (gửi mail)(làm sau)
+        + Upload avatar (update)
+
+    + articles
+        + ảnh bìa => upload ảnh bìa bài viết 
+        + get all bài viết => mỗi lần lấy ra 10 bài viết (paginate)
+        + get 1 bài viết 
+        + user CRUD bài viết 
+    + comments 
+        + user CRUD comment 
+
+    
++ Tìm kiếm ở trang dashboard (đăng nhập hoặc chưa đăng nhập đều được => không cần middleware)
+    + Cho phép tìm kiếm bằng tên user (full name) và tên bài viết (title) (không tìm trong nội dung vì nó dài => mất thời gian)
+    + input : text_search 
+    + output : chỉ lấy 10 hàng đầu tiên (nếu ít hơn thì lấy ít hơn)
+        + nếu là user thì mỗi hàng phải có 
+            + lấy ra id 
+            + link ảnh đại diện  
+            + lấy ra full name 
+        + nếu là article thì mỗi hàng phải có 
+            + lấy ra id 
+            + lấy ra title 
+
+    + cách làm :
+        + full join hay left join ,... gì thì tùy => rồi lấy ra 10 hàng đầu tiên thoả mãn   
+        + cách làm dễ hơn 
+            đầu tiên search bảng user 
+                => nếu quá 10 hàng rồi thì
+            nếu chưa đủ 10 hàng thì search tiếp vào bảng article 
+            lấy ra 10-n hàng còn lại 
+
+    + tất nhiên là search theo kiểu : like %text% 
+         
+ví dụ : 
+
+    + text_search = Nguyễn
+    + output : 
+        data : {
+            {
+                id:1,
+                fullname:Nguyễn Văn Mạnh,
+                path: "/avatar/7dwDJLkCl1Bx0MQOXNFD--RJVUNZPJNM-4k.jpg", <- link ảnh đại diện nếu có 
+                type:'user'
+            },  
+            {
+                id:2,
+                fullname:Nguyễn Công Cường,
+                image_path: null,
+                type:'user'
+            },  
+            {
+                id:99,
+                title:'Bài viết về lãnh tụ Nguyễn Tất Thành'
+                type:'article'
+            } 
+        }
