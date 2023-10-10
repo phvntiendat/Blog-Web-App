@@ -1,5 +1,7 @@
 # BlogWebApp
-BlogWebAppb 
+
+Original Project: https://github.com/NguyenVanManh-AI/BlogWebApp.git
+
 ### API Django : 
     + Deploy : https://api-django-blog.up.railway.app/
     + Github : https://github.com/NguyenVanManh-AI/API-Blog-App
